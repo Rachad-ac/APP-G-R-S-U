@@ -7,6 +7,8 @@ use App\Http\Controllers\TacheController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SalleController;
+use App\Http\Controllers\ReservationController;
 
 //Routes non proteger pour admin ou user
 Route::post('/register', [AuthController::class, 'register']);
@@ -21,4 +23,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']); 
 
     //Les autres routes ici
+    Route::apiResource('salles', SalleController::class);
+    Route::apiResource('reservations', ReservationController::class);
 }); 
