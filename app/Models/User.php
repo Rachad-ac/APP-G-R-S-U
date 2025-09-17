@@ -20,11 +20,17 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'nom',
+        'prenom',
         'email',
         'password',
-        'role',
+        'id_role',
     ];
+
+    public function role()
+    {
+       return $this->belongsTo(Role::class, 'id_role', 'id_role');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -49,7 +55,4 @@ class User extends Authenticatable
         ];
     }
 
-     public function tache() {
-        return $this->hasMany(tache::class);
-    }
 }
