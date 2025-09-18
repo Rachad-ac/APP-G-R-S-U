@@ -1,37 +1,54 @@
 <?php
-
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\EquipementController;
+use App\Http\Controllers\ReservationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+// ==========================
 // Routes publiques
+// ==========================
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+// ==========================
+// Routes protégées (authentification requise)
+// ==========================
 Route::middleware('auth:sanctum')->group(function () {
 
-    // Routes accessibles à tous les utilisateurs connectés
+    // Profil utilisateur connecté
     Route::get('/user', fn (Request $request) => $request->user());
-    Route::get('/user/all', [UserController::class , 'index']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // Route réservée uniquement aux admins
+    // ==========================
+    // Routes Admin uniquement
+    // ==========================
     Route::middleware('role:Admin')->group(function () {
+        Route::get('/users', [UserController::class, 'index']);
+        Route::delete('/users/{id}', [UserController::class, 'destroy']);
 
-        Route::get('/test', function () {
-            return response()->json(['message' => 'hello']);
-        });
+        // Gestion des équipements (CRUD)
+        Route::apiResource('equipements', EquipementController::class);
 
-        // routes admin ici
-        Route::delete('user/delete/{id}' , [UserController::class , 'destroy']);
+        // Gestion des réservations (CRUD)
+        Route::apiResource('reservations', ReservationController::class);
     });
 
-    // Route réservée uniquement aux utilisateurs
+    // ==========================
+    // Routes User uniquement
+    // ==========================
     Route::middleware('role:User')->group(function () {
+        // Un utilisateur peut créer une réservation
+        Route::post('/reservations', [ReservationController::class, 'store']);
 
-            // routes user ici
-        });
+        // Voir ses propres réservations
+        Route::get('/mes-reservations', [ReservationController::class, 'mesReservations']);
+    });
 
-    //Les autres routes partager ici
+
+    // Routes partagées
+
+    Route::get('/equipements', [EquipementController::class, 'index']);
+    Route::get('/reservations', [ReservationController::class, 'index']);
 });
