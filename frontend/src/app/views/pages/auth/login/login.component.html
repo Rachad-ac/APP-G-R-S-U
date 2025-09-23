@@ -1,41 +1,75 @@
-<div class="row w-100 mx-0 auth-page">
-  <div class="col-md-8 col-xl-6 mx-auto">
-    <div class="card">
-      <div class="row">
-        <div class="col-md-4 pe-md-0">
-          <div class="auth-side-wrapper" [ngStyle]="{ 'background-image': 'url(https://via.placeholder.com/219x452)' }">
+<div class="container-fluid w-100 d-flex align-items-center justify-content-center min-vh-100 bg-light">
+  <div class="col-12 col-md-8 col-xl-6 col-xxl-4 w-30">
+    <div class="card shadow ">
+      <!-- En-tête bleu -->
+      <div class="card-header bg-primary text-white text-center py-3">
+        <h3 class="fw-normal mb-0">Connexion</h3>
+      </div>
 
+      <!-- Corps avec les inputs -->
+      <div class="card-body px-4 py-4">
+        <form class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label for="email" class="form-label">E-mail <span class="text-danger">*</span></label>
+            <input 
+              type="email" 
+              class="form-control" 
+              id="email" 
+              name="email"
+              autocomplete="email"
+              placeholder="votre.email@exemple.com"
+              value=""
+              required>
+            <div class="invalid-feedback">
+              Veuillez saisir une adresse e-mail valide.
+            </div>
           </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Mot de passe <span class="text-danger">*</span></label>
+            <input 
+              type="password" 
+              class="form-control" 
+              id="password" 
+              name="password"
+              autocomplete="current-password" 
+              placeholder="Votre mot de passe"
+              value=""
+              required>
+            <div class="invalid-feedback">
+              Veuillez saisir votre mot de passe.
+            </div>
+          </div>
+
+          <!-- Zone de message d'erreur/succès -->
+          <div class="mb-3" *ngIf="message">
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Pied avec bouton et lien -->
+      <div class="card-footer bg-white text-center py-4">
+        <div class="d-grid gap-2 mb-3">
+          <button 
+            type="submit" 
+            class="btn btn-primary btn-sm" 
+            (click)="onLoggedin($event)">
+            <i class="fas fa-sign-in-alt me-2"></i>
+            Se connecter
+          </button>
         </div>
-        <div class="col-md-8 ps-md-0">
-          <div class="auth-form-wrapper px-4 py-5">
-            <a routerLink="." class="nobleui-logo d-block mb-2">Smart<span class="text-warning fw-bold">Salle</span> IPD</a>
-            <h5 class="text-muted fw-normal mb-4">Welcome back! Log in to your account.</h5>
-            <form class="forms-sample">
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" value="admin@demo.com">
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" autocomplete="current-password" placeholder="Password" value="12345678">
-              </div>
-              <div class="form-check mb-3">
-                <input type="checkbox" class="form-check-input" id="authCheck">
-                <label class="form-check-label" for="authCheck">
-                  Remember me
-                </label>
-              </div>
-              <div>
-                <button type="submit" class="btn btn-primary me-2 mb-2 mb-md-0" (click)="onLoggedin($event)">Login</button>
-                <button type="button" class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0">
-                  <i class="feather icon-twitter btn-icon-prepend"></i>
-                  Login with twitter
-                </button>
-              </div>
-              <a routerLink="/auth/register" class="d-block mt-3 text-muted">Not a user? Sign up</a>
-            </form>
-          </div>
+        
+        <div class="text-muted">
+          <small>
+            Besoin d'un compte ? 
+            <a routerLink="/register" class="text-primary text-decoration-none fw-medium">
+              S'inscrire
+            </a>
+          </small>
         </div>
       </div>
     </div>

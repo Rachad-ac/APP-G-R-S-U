@@ -8,6 +8,12 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
 
+   message : string = '';
+   roles: any = [
+    { value: 1, label: 'Etudiant' },
+    { value: 1, label: 'Enseignant' },
+  ];
+
   constructor(private router: Router) { }
 
   ngOnInit(): void {

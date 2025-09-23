@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { BaseComponent } from './views/layout/base/base.component';
 import { AuthGuard } from './core/guard/auth.guard';
 import { ErrorPageComponent } from './views/pages/error-page/error-page.component';
+import { RoleGuard } from './core/guard/role.guard';
 
 
 const routes: Routes = [
@@ -10,7 +11,8 @@ const routes: Routes = [
   {
     path: 'admin',
     component: BaseComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, RoleGuard],
+    data: { expectedRole: 'Admin' },
     children: [
       {
         path: 'gestion-admin',
@@ -20,19 +22,19 @@ const routes: Routes = [
         path: 'gestion-reservation',
         loadChildren: () => import('./views/pages/gestion-reservation/gestion-reservation.module').then(m => m.GestionReservationModule)
       },
-      
     ]
   },
+  
   {
     path: 'user',
     component: BaseComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, RoleGuard],
+    data: { expectedRole: 'Etudiant' }, // ou 'Enseignant'
     children: [
       {
         path: 'gestion-reservation',
         loadChildren: () => import('./views/pages/gestion-reservation/gestion-reservation.module').then(m => m.GestionReservationModule)
       },
-      
     ]
   },
   {
