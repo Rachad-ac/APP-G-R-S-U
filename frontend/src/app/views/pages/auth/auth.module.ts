@@ -5,6 +5,7 @@ import { RegisterComponent } from './register/register.component';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthComponent } from './auth.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -31,11 +32,15 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     LoginComponent, 
-    RegisterComponent, AuthComponent],
+    RegisterComponent, 
+    AuthComponent],
   imports: [
+    RouterModule.forChild(routes),
     CommonModule,
-    NgSelectModule,
-    RouterModule.forChild(routes)
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+    NgSelectModule
   ]
 })
 export class AuthModule { }
