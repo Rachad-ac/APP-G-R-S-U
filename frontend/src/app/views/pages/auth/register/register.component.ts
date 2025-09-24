@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -8,23 +9,46 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
 
-   message : string = '';
-   roles: any = [
-    { value: 1, label: 'Etudiant' },
-    { value: 1, label: 'Enseignant' },
+  message: string = '';
+  roles: any = [
+    { value: 2, label: 'Etudiant' },
+    { value: 3, label: 'Enseignant' },
   ];
 
-  constructor(private router: Router) { }
+  // modèle pour le formulaire
+  registerData = {
+    nom: '',
+    prenom: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
+    id_role: null
+  };
 
-  ngOnInit(): void {
-  }
+  constructor(private authService: AuthService, private router: Router) {}
+
+  ngOnInit(): void {}
 
   onRegister(e: Event) {
     e.preventDefault();
-    localStorage.setItem('isLoggedin', 'true');
-    if (localStorage.getItem('isLoggedin')) {
-      this.router.navigate(['/']);
-    }
-  }
 
+    // Vérification basique mot de passe
+    if (this.registerData.password !== this.registerData.password_confirmation) {
+      this.message = "Les mots de passe ne correspondent pas.";
+      return;
+    }
+
+    this.authService.register(this.registerData).subscribe({
+      next: (res) => {
+        this.message = "Inscription réussie ! Redirection...";
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 1500);
+      },
+      error: (err) => {
+        console.error(err);
+        this.message = "Une erreur est survenue lors de l'inscription.";
+      }
+    });
+  }
 }

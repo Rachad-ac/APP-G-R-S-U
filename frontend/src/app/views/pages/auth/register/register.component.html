@@ -17,6 +17,7 @@
                 class="form-control" 
                 id="nom" 
                 name="nom"
+                [(ngModel)]="registerData.nom"
                 autocomplete="family-name" 
                 placeholder="Votre nom"
                 required>
@@ -32,6 +33,7 @@
                 class="form-control" 
                 id="prenom" 
                 name="prenom"
+                [(ngModel)]="registerData.prenom"
                 autocomplete="given-name" 
                 placeholder="Votre prénom"
                 required>
@@ -44,30 +46,32 @@
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="email" class="form-label">E-mail <span class="text-danger">*</span></label>
-            <input 
-              type="email" 
-              class="form-control" 
-              id="email" 
-              name="email"
-              autocomplete="email"
-              placeholder="votre.email@exemple.com"
-              required>
-            <div class="invalid-feedback">
-              Veuillez saisir une adresse e-mail valide.
-            </div>
+              <input 
+                type="email" 
+                class="form-control" 
+                id="email" 
+                name="email"
+                [(ngModel)]="registerData.email"
+                autocomplete="email"
+                placeholder="votre.email@exemple.com"
+                required>
+              <div class="invalid-feedback">
+                Veuillez saisir une adresse e-mail valide.
+              </div>
             </div>
             <div  class="col-md-6">
-              <label for="option" class="form-label">Roles <span class="text-danger">*</span></label>
+              <label for="option" class="form-label">Rôle <span class="text-danger">*</span></label>
               <ng-select
                 [items]="roles"
                 bindLabel="label"
                 bindValue="value"
-                placeholder="Sélectionner un role..."
-                >
+                [(ngModel)]="registerData.id_role"
+                name="id_role"
+                placeholder="Sélectionner un rôle...">
               </ng-select>
-            <div class="invalid-feedback">
-              Veuillez Selectionner un role.
-            </div>
+              <div class="invalid-feedback">
+                Veuillez sélectionner un rôle.
+              </div>
             </div>
           </div>
 
@@ -79,6 +83,7 @@
                 class="form-control" 
                 id="password" 
                 name="password"
+                [(ngModel)]="registerData.password"
                 autocomplete="new-password"
                 placeholder="Votre mot de passe"
                 minlength="8"
@@ -98,6 +103,7 @@
                 class="form-control" 
                 id="password_confirmation" 
                 name="password_confirmation"
+                [(ngModel)]="registerData.password_confirmation"
                 autocomplete="new-password"
                 placeholder="Confirmez votre mot de passe"
                 required>

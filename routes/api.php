@@ -33,15 +33,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Gestion des réservations (CRUD)
         Route::apiResource('reservations', ReservationController::class);
+
+        Route::post('/reservations', [ReservationController::class, 'store']);
     });
 
     // ==========================
-    // Routes User uniquement
+    // Routes Enseigant et Etudiant uniquement
     // ==========================
-    Route::middleware('role:User')->group(function () {
-        // Un utilisateur peut créer une réservation
-        Route::post('/reservations', [ReservationController::class, 'store']);
-
+    Route::middleware('role:Enseignant' || 'role:Etudiant')->group(function () {
         // Voir ses propres réservations
         Route::get('/mes-reservations', [ReservationController::class, 'mesReservations']);
     });

@@ -45,12 +45,15 @@ onLoggedin(e: Event, formValues: { email: string, password: string }) {
 
       // Redirection selon le rôle
       if (user.role === 'Admin') {
-        this.router.navigate(['/admin/gestion-admin']);
-      } else if (user.role === 'Enseignant' || user.role === 'Etudiant') {
-        this.router.navigate(['/user/gestion-reservation']);
-      } else {
-        this.router.navigate([this.returnUrl]);
+          this.router.navigate(['/admin/gestion-admin']);
+        } else if (user.role === 'Etudiant') {
+          this.router.navigate(['/etudiant/gestion-reservation']);
+        } else if (user.role === 'Enseignant') {
+          this.router.navigate(['/enseignant/gestion-reservation']);
+        } else {
+          this.router.navigate(['/error']);
       }
+
     },
     error: (err) => {
       console.error(err);
@@ -65,11 +68,14 @@ onLoggedin(e: Event, formValues: { email: string, password: string }) {
 private getRoleName(roleId: number): string {
   switch (roleId) {
     case 1: return 'Admin';
-    case 2: return 'Enseignant';
-    case 3: return 'Etudiant';
-    default: return 'Utilisateur';
+    case 2: return 'Etudiant';
+    case 3: return 'Enseignant';
+    default: 
+      console.warn('RoleId inconnu:', roleId);
+      return 'Utilisateur';
   }
 }
+
 
 
 

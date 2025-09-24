@@ -24,19 +24,31 @@ const routes: Routes = [
       },
     ]
   },
-  
   {
-    path: 'user',
+    path: 'etudiant',
     component: BaseComponent,
     canActivate: [AuthGuard, RoleGuard],
-    data: { expectedRole: 'Etudiant' }, // ou 'Enseignant'
+    data: { expectedRole: 'Etudiant' },
     children: [
       {
         path: 'gestion-reservation',
         loadChildren: () => import('./views/pages/gestion-reservation/gestion-reservation.module').then(m => m.GestionReservationModule)
-      },
+      }
     ]
   },
+  {
+    path: 'enseignant',
+    component: BaseComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { expectedRole: 'Enseignant' },
+    children: [
+      {
+        path: 'gestion-reservation',
+        loadChildren: () => import('./views/pages/gestion-reservation/gestion-reservation.module').then(m => m.GestionReservationModule)
+      }
+    ]
+  },
+
   {
     path: 'error',
     component: ErrorPageComponent,

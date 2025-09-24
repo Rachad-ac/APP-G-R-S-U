@@ -1,41 +1,44 @@
-import { Component, OnInit, ViewChild, ElementRef, Inject, Renderer2 } from '@angular/core';
+import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit{
+
+  currentUser: any = null;
 
   constructor(
     @Inject(DOCUMENT) private document: Document, 
     private renderer: Renderer2,
-    private router: Router
-  ) { }
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
+    this.loadCurrentUser();
   }
 
-  /**
-   * Sidebar toggle on hamburger button click
-   */
+  loadCurrentUser(): void {
+    const user = this.authService.getUser();
+    if (user) {
+      this.currentUser = user;
+    }
+  }
+
   toggleSidebar(e: Event) {
     e.preventDefault();
     this.document.body.classList.toggle('sidebar-open');
   }
 
-  /**
-   * Logout
-   */
   onLogout(e: Event) {
     e.preventDefault();
-    localStorage.removeItem('isLoggedin');
 
-    if (!localStorage.getItem('isLoggedin')) {
-      this.router.navigate(['/login']);
-    }
+    this.authService.logout().subscribe({
+      next: res => console.log(res.message),
+      error: err => console.error('Erreur lors de la déconnexion', err)
+    });
   }
-
 }

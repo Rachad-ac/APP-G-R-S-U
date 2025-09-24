@@ -28,13 +28,22 @@ class DatabaseSeeder extends Seeder
             'id_role' => 1, // Admin
         ]);
 
-        // Crée un utilisateur standard
+        // Crée un Etudiant
         User::create([
-            'nom' => 'User',
-            'prenom' => 'Test',
-            'email' => 'user@example.com',
-            'password' => 'user123',
-            'id_role' => 2, // User
+            'nom' => 'Sow',
+            'prenom' => 'Ali',
+            'email' => 'ali@example.com',
+            'password' => 'ali123',
+            'id_role' => 2, // Etudiant
+        ]);
+
+        // Crée un Enseignant
+        User::create([
+            'nom' => 'Ba',
+            'prenom' => 'Said',
+            'email' => 'said@example.com',
+            'password' => 'said123',
+            'id_role' => 3, // Enseignant
         ]);
     }
 }

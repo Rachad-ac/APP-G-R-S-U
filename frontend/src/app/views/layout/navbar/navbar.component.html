@@ -153,20 +153,15 @@
             <div class="mb-3">
               <img class="wd-80 ht-80 rounded-circle" src="https://via.placeholder.com/80x80" alt="">
             </div>
-            <div class="text-center">
-              <p class="tx-16 fw-bolder">Amiah Burton</p>
-              <p class="tx-12 text-muted">amiahburton@gmail.com</p>
+            <div class="text-center" *ngIf="currentUser">
+              <p class="tx-12 text-muted">{{ currentUser.prenom }} {{ currentUser.nom }}</p>
+              <p class="tx-12 fw-bolder">{{ currentUser.email }}</p>
+              <p class="tx-12 text-muted"><small>{{ currentUser.role }}</small></p>
             </div>
           </div>
           <ul class="list-unstyled p-1">
             <li class="dropdown-item py-2">
-              <a href="" (click)="false" class="d-flex text-body ms-0">
-                <i class="feather icon-edit me-2 icon-md"></i>
-                <span>Modifier mot de passe</span>
-              </a>
-            </li>
-            <li class="dropdown-item py-2">
-              <a href="" (click)="onLogout($event)" class="d-flex text-body ms-0">
+              <a href="" (click)="onLogout($event)" class="d-flex text-body ms-0 justify-content-center">
                 <i class="feather icon-log-out me-2 icon-md"></i>
                 <span>Deconnexion</span>
               </a>
