@@ -4,19 +4,75 @@ import { MenuItem } from './menu.model';
 export const MENU: MenuItem[] = [
   // Section gestion admin
   {
-    label: 'Gestion Administrateur',
+    label: 'Administration',
     isTitle: true,
   },
   {
-    label: 'Utilisateurs',
+    label: 'Dashboard',
     icon: 'users',
     link: '/admin/gestion-admin/users'
   },
-
-  // Section gestion resevation
   {
-    label: 'Gestion Reservation',
+    label: 'Reservation',
+    icon: 'users',
+    link: '/admin/gestion-admin/reservation'
+  },
+  {
+    label: 'Planning',
+    icon: 'users',
+    link: '/admin/gestion-admin/planning'
+  },
+  {
+    label: 'Salles',
+    icon: 'users',
+    link: '/admin/gestion-admin/salles'
+  },
+  {
+    label: 'Classes',
+    icon: 'users',
+    link: '/admin/gestion-admin/classes'
+  },
+  {
+    label: 'Matiers',
+    icon: 'users',
+    link: '/admin/gestion-admin/matieres'
+  },
+  {
+    label: 'Filieres',
+    icon: 'users',
+    link: '/admin/gestion-admin/filieres'
+  },
+  {
+    label: 'Cours',
+    icon: 'users',
+    link: '/admin/gestion-admin/cours'
+  },
+
+  // Section gestion users
+  {
+    label: 'Gestion utilisateurs',
     isTitle: true,
   },
+  {
+    label: 'Reservation',
+    icon: 'users',
+    link: '/users/gestion-users/reservation'
+  },
+  {
+    label: 'Mes reservation',
+    icon: 'users',
+    link: '/users/gestion-users/mes-eservation'
+  },
+  {
+    label: 'Mes cours',
+    icon: 'users',
+    link: '/users/gestion-users/mes-cours'
+  },
+  {
+    label: 'Mon programme',
+    icon: 'users',
+    link: '/users/gestion-users/mon-programme'
+  },
+
   
 ];

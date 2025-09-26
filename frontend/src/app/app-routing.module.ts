@@ -31,7 +31,7 @@ const routes: Routes = [
     data: { expectedRole: 'Etudiant' },
     children: [
       {
-        path: 'gestion-reservation',
+        path: 'gestion-users',
         loadChildren: () => import('./views/pages/gestion-reservation/gestion-reservation.module').then(m => m.GestionReservationModule)
       }
     ]
@@ -43,7 +43,7 @@ const routes: Routes = [
     data: { expectedRole: 'Enseignant' },
     children: [
       {
-        path: 'gestion-reservation',
+        path: 'gestion-users',
         loadChildren: () => import('./views/pages/gestion-reservation/gestion-reservation.module').then(m => m.GestionReservationModule)
       }
     ]

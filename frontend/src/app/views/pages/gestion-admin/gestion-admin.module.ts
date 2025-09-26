@@ -11,12 +11,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { RouterModule } from '@angular/router';
 import { ListeUsersComponent } from './users/liste-users/liste-users.component';
+import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
 
 
 @NgModule({
   declarations: [
     // ajouter les composant de admin ici 
-    ListeUsersComponent
+    ListeUsersComponent,
+    DashboardComponent
   ],
   imports: [
     CommonModule,

@@ -47,9 +47,9 @@ onLoggedin(e: Event, formValues: { email: string, password: string }) {
       if (user.role === 'Admin') {
           this.router.navigate(['/admin/gestion-admin']);
         } else if (user.role === 'Etudiant') {
-          this.router.navigate(['/etudiant/gestion-reservation']);
+          this.router.navigate(['/etudiant/gestion-users']);
         } else if (user.role === 'Enseignant') {
-          this.router.navigate(['/enseignant/gestion-reservation']);
+          this.router.navigate(['/enseignant/gestion-users']);
         } else {
           this.router.navigate(['/error']);
       }
@@ -72,7 +72,7 @@ private getRoleName(roleId: number): string {
     case 3: return 'Enseignant';
     default: 
       console.warn('RoleId inconnu:', roleId);
-      return 'Utilisateur';
+      return '';
   }
 }
 
