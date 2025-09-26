@@ -7,11 +7,10 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class DashboardService {
-  private apiUrl = `${environment.baseUrl}dashboard-stats`;
 
   constructor(private http: HttpClient) {}
 
   getStats(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
+    return this.http.get<any>(`${environment.baseUrl}dashboard`);
   }
 }
