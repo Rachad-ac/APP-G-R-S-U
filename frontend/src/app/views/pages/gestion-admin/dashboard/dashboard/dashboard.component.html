@@ -1,0 +1,61 @@
+<div class="container mt-4">
+  <h2 class="mb-4">Tableau de Bord</h2>
+
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <div class="card shadow-sm border-primary">
+        <div class="card-body">
+          <h5 class="card-title">Utilisateurs</h5>
+          <p class="card-text fs-3">{{ stats.total_users }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card shadow-sm border-success">
+        <div class="card-body">
+          <h5 class="card-title">Salles</h5>
+          <p class="card-text fs-3">{{ stats.total_salles }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card shadow-sm border-warning">
+        <div class="card-body">
+          <h5 class="card-title">Réservations</h5>
+          <p class="card-text fs-3">{{ stats.reservations }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-4 mb-3">
+      <div class="card shadow-sm border-secondary">
+        <div class="card-body">
+          <h6 class="card-title">En attente</h6>
+          <p class="fs-4">{{ stats.reservations_en_attente }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card shadow-sm border-success">
+        <div class="card-body">
+          <h6 class="card-title">Validées</h6>
+          <p class="fs-4">{{ stats.reservations_validees }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card shadow-sm border-danger">
+        <div class="card-body">
+          <h6 class="card-title">Refusées</h6>
+          <p class="fs-4">{{ stats.reservations_refusees }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
