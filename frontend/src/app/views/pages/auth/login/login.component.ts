@@ -38,7 +38,7 @@ onLoggedin(e: Event, formValues: { email: string, password: string }) {
         prenom: res.user.prenom,
         email: res.user.email,
         roleId: res.user.id_role,
-        role: this.getRoleName(res.user.id_role) // fonction utilitaire pour transformer id_role en nom
+        role: res.user.role
       };
 
       this.authService.saveUser(user);
@@ -61,22 +61,4 @@ onLoggedin(e: Event, formValues: { email: string, password: string }) {
     }
   });
 }
-
-/**
- * Transforme l'id_role en nom de rôle
- */
-private getRoleName(roleId: number): string {
-  switch (roleId) {
-    case 1: return 'Admin';
-    case 2: return 'Etudiant';
-    case 3: return 'Enseignant';
-    default: 
-      console.warn('RoleId inconnu:', roleId);
-      return '';
-  }
-}
-
-
-
-
 }

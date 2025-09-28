@@ -11,8 +11,8 @@ export class RegisterComponent implements OnInit {
 
   message: string = '';
   roles: any = [
-    { value: 2, label: 'Etudiant' },
-    { value: 3, label: 'Enseignant' },
+    { value: 'Etudiant', label: 'Etudiant' },
+    { value: 'Enseignant', label: 'Enseignant' },
   ];
 
   // modèle pour le formulaire
@@ -22,7 +22,7 @@ export class RegisterComponent implements OnInit {
     email: '',
     password: '',
     password_confirmation: '',
-    id_role: null
+    role: null
   };
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -40,7 +40,7 @@ export class RegisterComponent implements OnInit {
 
     this.authService.register(this.registerData).subscribe({
       next: (res) => {
-        this.message = "Inscription réussie ! Redirection...";
+        this.message = "Inscription réussie ! ";
         setTimeout(() => {
           this.router.navigate(['/login']);
         }, 1500);

@@ -18,7 +18,7 @@ class AuthController extends Controller
             'prenom' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'id_role' => 'required|exists:roles,id_role',
+            'role' => 'required|exists:roles,role',
         ]);
 
         if ($validator->fails()) {
@@ -26,11 +26,11 @@ class AuthController extends Controller
         }
 
         $user = User::create([
-            'nom'     => $request->nom,
+            'nom' => $request->nom,
             'prenom' => $request->prenom,
-            'email'    => $request->email,
+            'email' => $request->email,
             'password' => $request->password,
-            'id_role' => $request->id_role,
+            'role' => $request->role,
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;

@@ -9,7 +9,6 @@ import { Observable, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = `${environment.baseUrl}`;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -22,7 +21,7 @@ export class AuthService {
   }
 
   login(user: any) : Observable<any> {
-    return this.http.post(`${this.apiUrl}login`, user)
+    return this.http.post(`${environment.baseUrl}login`, user)
     .pipe(tap((res: any) => {
       localStorage.setItem('token', res.token);
       localStorage.setItem('role', res.role);
@@ -31,7 +30,7 @@ export class AuthService {
 
   logout(): Observable<any> {
     // Pas besoin d'envoyer l'user, interceptor gère le token
-    return this.http.post<any>(`${this.apiUrl}logout`, {}).pipe(
+    return this.http.post<any>(`${environment.baseUrl}logout`, {}).pipe(
       tap(() => {
         // Supprimer le token et les infos utilisateur après réussite
         localStorage.removeItem('token');
@@ -62,9 +61,9 @@ export class AuthService {
     return !!this.getToken();
   }
 
-  hasRole(roleId: number): boolean {
+  hasRole(role: String): boolean {
     const user = this.getUser();
-    return user && user.role === roleId;
+    return user && user.role === role;
   }
 
 }

@@ -15,9 +15,10 @@ import { Router, NavigationEnd } from '@angular/router';
 export class SidebarComponent implements OnInit, AfterViewInit {
 
   @ViewChild('sidebarToggler') sidebarToggler: ElementRef;
-
-  menuItems: MenuItem[] = [];
   @ViewChild('sidebarMenu') sidebarMenu: ElementRef;
+
+  currentUser: any;
+  menuItems: MenuItem[] = [];
 
   constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2, router: Router) { 
     router.events.forEach((event) => {
@@ -40,14 +41,20 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.menuItems = MENU;
+    const userData = localStorage.getItem('user');
+    if(userData){
+      this.currentUser = JSON.parse(userData);
+    }
 
-    /**
-     * Sidebar-folded on desktop (min-width:992px and max-width: 1199px)
-     */
+    // Filtrer le menu selon le rôle
+    this.menuItems = MENU.filter(item => 
+      !item.roles || item.roles.includes(this.currentUser.role)
+    );
+
+    // Sidebar-folded on desktop
     const desktopMedium = window.matchMedia('(min-width:992px) and (max-width: 1199px)');
     desktopMedium.addEventListener('change', () => {
-      this.iconSidebar;
+      this.iconSidebar(desktopMedium);
     });
     this.iconSidebar(desktopMedium);
   }

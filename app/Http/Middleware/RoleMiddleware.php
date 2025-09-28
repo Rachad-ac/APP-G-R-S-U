@@ -10,7 +10,7 @@ class RoleMiddleware
 {
     public function handle(Request $request, Closure $next, $role): Response
     {
-        if ($request->user()?->role?->nom_role !== $role) {
+        if ($request->user()?->role?->role !== $role) {
             return response()->json(['message' => 'Accès refusé. Rôle requis : ' . $role], 403);
         }
 

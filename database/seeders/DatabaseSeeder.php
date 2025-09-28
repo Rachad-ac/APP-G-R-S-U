@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
             'prenom' => 'Test',
             'email' => 'admin@example.com',
             'password' => 'admin123',
-            'id_role' => 1, // Admin
+            'role' => 'Admin',
         ]);
 
         // Crée un Etudiant
@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             'prenom' => 'Ali',
             'email' => 'ali@example.com',
             'password' => 'ali123',
-            'id_role' => 2, // Etudiant
+            'role' => 'Etudiant',
         ]);
 
         // Crée un Enseignant
@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
             'prenom' => 'Said',
             'email' => 'said@example.com',
             'password' => 'said123',
-            'id_role' => 3, // Enseignant
+            'role' => 'Enseignant',
         ]);
     }
 }
