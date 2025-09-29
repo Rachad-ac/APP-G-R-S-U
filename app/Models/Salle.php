@@ -8,14 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Salle extends Model
 {
     use HasFactory;
-
     protected $primaryKey = 'id_salle';
-
     protected $fillable = [
-        'nom_salle',
+        'nom',
+        'type_salle',
         'capacite',
         'localisation',
-        'id_type_salle',
     ];
 
     // Une salle peut avoir plusieurs réservations
@@ -23,10 +21,8 @@ class Salle extends Model
     {
         return $this->hasMany(Reservation::class, 'id_salle', 'id_salle');
     }
-
-    // Une salle appartient à un type
-    public function typeSalle()
-    {
-        return $this->belongsTo(TypeSalle::class, 'id_type_salle', 'id_type_salle');
-    }
+    // public function equipements()
+    // {
+    //     return $this->hasMany(Equipement::class, 'id_salle');
+    // }
 }

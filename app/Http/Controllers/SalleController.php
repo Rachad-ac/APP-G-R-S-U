@@ -10,52 +10,90 @@ class SalleController extends Controller
     // Liste de toutes les salles
     public function index()
     {
-        return Salle::with('typeSalle')->get();
+        $salles = Salle::all();
+
+        return response()->json([
+            'message' => 'Liste des salles',
+            'data'    => $salles
+        ], 200);
     }
 
     // Ajouter une nouvelle salle
     public function store(Request $request)
     {
-        $request->validate([
-            'nom_salle' => 'required|string|max:100',
-            'capacite' => 'required|integer',
-            'localisation' => 'required|string|max:150',
-            'id_type_salle' => 'required|exists:type_salles,id_type_salle',
+        $validated = $request->validate([
+            'nom'   => 'required|string|max:100',
+            'type_salle'   => 'required|in:TP,Amphi,Cours', 
+            'capacite'    => 'required|integer|min:1',
+            'localisation'=> 'required|string|max:150',
         ]);
 
-        $salle = Salle::create($request->all());
-        return response()->json($salle, 201);
+        $salle = Salle::create($validated);
+
+        return response()->json([
+            'message' => 'Salle cree avec succes',
+            'data'    => $salle
+        ], 201);
     }
 
-    // Détails d’une salle
+    // Pour voir une salle précise
     public function show($id)
     {
-        $salle = Salle::with('typeSalle')->findOrFail($id);
-        return response()->json($salle);
+        $salle = Salle::where('id_salle', $id)->firstOrFail();
+        return response()->json([
+            'message' => 'Salle trouvee',
+            'data'    => $salle
+        ], 200);
     }
 
     // Modifier une salle
     public function update(Request $request, $id)
     {
-        $salle = Salle::findOrFail($id);
+        $salle = Salle::where('id_salle', $id)->firstOrFail();
 
-        $request->validate([
-            'nom_salle' => 'sometimes|string|max:100',
-            'capacite' => 'sometimes|integer',
-            'localisation' => 'sometimes|string|max:150',
-            'id_type_salle' => 'sometimes|exists:type_salles,id_type_salle',
+        $validated = $request->validate([
+            'nom'   => 'sometimes|string|max:100',
+            'type_salle'   => 'sometimes|in:TP,Amphi,Cours', 
+            'capacite'    => 'sometimes|integer|min:1',
+            'localisation'=> 'sometimes|string|max:150',
         ]);
 
-        $salle->update($request->all());
-        return response()->json($salle);
+        $salle->update($validated);
+
+        return response()->json([
+            'message' => 'Salle mise a jour avec succes',
+            'data'    => $salle
+        ], 200);
+    }
+
+    // Recherche filtrée
+    public function search(Request $request)
+    {
+        $query = Salle::query();
+
+        // Recherche par nom
+        if ($request->has('nom')) {
+            $query->where('nom', 'like', '%' . $request->nom . '%');
+        }
+
+        // Recherche par type
+        if ($request->has('type_salle')) {
+            $query->where('type_salle', $request->type_salle);
+        }
+
+        // Recherche par capacité minimale
+        if ($request->has('capacite')) {
+            $query->where('capacite', '>=', $request->capacite);
+        }
+
+        return response()->json($query->get());
     }
 
     // Supprimer une salle
     public function destroy($id)
     {
-        $salle = Salle::findOrFail($id);
+        $salle = Salle::where('id_salle', $id)->firstOrFail();
         $salle->delete();
-
-        return response()->json(['message' => 'Salle supprimée avec succès']);
+        return response()->json(['message' => 'Salle supprimee avec succes']);
     }
 }

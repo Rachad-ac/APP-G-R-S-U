@@ -12,17 +12,18 @@ class Reservation extends Model
     protected $primaryKey = 'id_reservation';
 
     protected $fillable = [
-        'id_utilisateur',
+        'id_user',
         'id_salle',
         'date_debut',
         'date_fin',
-        'statut',
+        'type_reservation',
+        'status',
     ];
 
     // Une réservation appartient à un utilisateur
-    public function utilisateur()
+    public function user()
     {
-        return $this->belongsTo(Utilisateur::class, 'id_utilisateur', 'id_utilisateur');
+        return $this->belongsTo(User::class, 'id_user', 'id');
     }
 
     // Une réservation concerne une salle
