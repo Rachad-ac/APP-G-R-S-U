@@ -6,31 +6,36 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-{
-    Schema::create('reservations', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-        $table->foreignId('salle_id')->constrained('salles')->onDelete('cascade');
-        $table->dateTime('date_debut')->index();
-        $table->dateTime('date_fin')->index();
-        $table->enum('statut', ['en_attente','confirmee','annulee'])->default('en_attente')->index();
-        $table->text('motif')->nullable();
-        $table->timestamps();
-        $table->softDeletes();
+    public function up()
+    {
+        Schema::create('reservations', function (Blueprint $table) {
+            $table->id();
 
-        $table->index(['salle_id', 'date_debut', 'date_fin']);
-    });
-}
+            /*
+             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('salle_id')->constrained('salles')->onDelete('cascade');
+            */
 
+            // Pour tester sans dépendance :
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('salle_id')->nullable();
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+            // Dates de réservation
+            $table->dateTime('date_debut');
+            $table->dateTime('date_fin');
+
+            // Informations complémentaires
+            $table->string('motif')->nullable();
+
+            // Statut de la réservation
+            $table->enum('statut', ['en_attente', 'confirmee', 'annulee'])
+                  ->default('en_attente');
+
+            $table->timestamps();
+        });
+    }
+
+    public function down()
     {
         Schema::dropIfExists('reservations');
     }

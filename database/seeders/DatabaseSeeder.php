@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
         // Appelle le seeder des rôles
         $this->call([
             RoleSeeder::class,
+            // TypeSalleSeeder::class,
+
         ]);
 
         // Crée un admin

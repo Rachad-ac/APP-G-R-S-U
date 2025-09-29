@@ -9,49 +9,36 @@ class Reservation extends Model
 {
     use HasFactory;
 
+    // Champs modifiables en masse
     protected $fillable = [
         'user_id',
         'salle_id',
         'date_debut',
         'date_fin',
-        'statut',
         'motif',
+        'statut'
     ];
 
-    protected $casts = [
-        'date_debut' => 'datetime',
-        'date_fin'   => 'datetime',
-    ];
+    /*
 
-    // Relations
+
+
+    Une réservation appartient à un utilisateur
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    Une réservation concerne une salle
     public function salle()
     {
         return $this->belongsTo(Salle::class);
     }
 
-    public function equipements()
+    Une réservation peut concerner un cours
+    public function cours()
     {
-        return $this->belongsToMany(Equipement::class, 'detail_reservations')
-                     ->withTimestamps();
+        return $this->belongsTo(Cours::class);
     }
-
-    /** Scope utilitaire : vérifier si un créneau se chevauche */
-    public function scopeOverlapping($query, int $salleId, $debut, $fin)
-    {
-        return $query->where('salle_id', $salleId)
-            ->where('statut', '!=', 'annulee')
-            ->where(function ($q) use ($debut, $fin) {
-                $q->whereBetween('date_debut', [$debut, $fin])
-                  ->orWhereBetween('date_fin', [$debut, $fin])
-                  ->orWhere(function ($qq) use ($debut, $fin) {
-                      $qq->where('date_debut', '<=', $debut)
-                         ->where('date_fin', '>=', $fin);
-                  });
-            });
-    }
+        */
 }

@@ -1,80 +1,74 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Validator;
 use App\Models\Equipement;
 use Illuminate\Http\Request;
 
 class EquipementController extends Controller
 {
-    /**
-     * Afficher tous les équipements.
-     */
+    // Liste des équipements
     public function index()
     {
-        return response()->json([
-            'success' => true,
-            'data' => Equipement::all()
-        ]);
+        $equipements = Equipement::all();
+        return response()->json($equipements, 200);
     }
 
-    /**
-     * Créer un nouvel équipement.
-     */
+    // Créer un équipement
     public function store(Request $request)
     {
-        $request->validate([
-            'nom_equipement' => 'required|string|unique:equipements,nom_equipement',
+        $validator = Validator::make($request->all(), [
+            'nom' => 'required|string|max:255',
+            'quantite' => 'required|integer|min:1',
+            'description' => 'nullable|string',
         ]);
 
-        $equipement = Equipement::create($request->only('nom_equipement'));
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Équipement créé avec succès.',
-            'data' => $equipement
-        ], 201);
+        $equipement = Equipement::create($request->only(['nom', 'quantite', 'description']));
+
+        return response()->json($equipement, 201);
     }
 
-    /**
-     * Afficher un équipement par son ID.
-     */
-    public function show(Equipement $equipement)
+    // Afficher un équipement
+    public function show($id)
     {
-        return response()->json([
-            'success' => true,
-            'data' => $equipement
-        ]);
+        $equipement = Equipement::find($id);
+
+        if (!$equipement) {
+            return response()->json(['message' => 'Équipement non trouvé'], 404);
+        }
+
+        return response()->json($equipement, 200);
     }
 
-    /**
-     * Mettre à jour un équipement.
-     */
-    public function update(Request $request, Equipement $equipement)
+    // Mettre à jour un équipement
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'nom_equipement' => 'required|string|unique:equipements,nom_equipement,' . $equipement->id,
-        ]);
+        $equipement = Equipement::find($id);
 
-        $equipement->update($request->only('nom_equipement'));
+        if (!$equipement) {
+            return response()->json(['message' => 'Équipement non trouvé'], 404);
+        }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Équipement mis à jour avec succès.',
-            'data' => $equipement
-        ]);
+        $equipement->update($request->only(['nom', 'quantite', 'description']));
+
+        return response()->json($equipement, 200);
     }
 
-    /**
-     * Supprimer un équipement.
-     */
-    public function destroy(Equipement $equipement)
+    // Supprimer un équipement
+    public function destroy($id)
     {
+        $equipement = Equipement::find($id);
+
+        if (!$equipement) {
+            return response()->json(['message' => 'Équipement non trouvé'], 404);
+        }
+
         $equipement->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Équipement supprimé avec succès.'
-        ]);
+        return response()->json(['message' => 'Équipement supprimé avec succès'], 200);
     }
 }
