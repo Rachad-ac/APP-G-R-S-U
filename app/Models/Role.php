@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
+    use HasFactory;
 
+    // Nom de la table
+    protected $table = 'roles';
+
+    // Colonnes qui peuvent être remplies automatiquement
     protected $fillable = [
-        'id_role',
-        'name_role'
-   ];
-
-   public function User()
-   {
-        return $this->hasMany(User::class, 'id_role');
-   }
+        'nom_role',
+    ];
 }
