@@ -12,6 +12,7 @@ export class ListeUsersComponent {
   selectedUser: any;
   pageOptions = { page: 0, size: 10 };
   totalUsers = 0;
+  userToUpdate:any;
 
   constructor(private userService: UserService, private modalService: NgbModal) {}
 
@@ -23,7 +24,6 @@ export class ListeUsersComponent {
   loadUsers() {
     this.userService.getUsers().subscribe({
       next: res => {
-        console.log(`users : ${res}`);
         this.users = res.data;
         this.totalUsers = res.metadata?.totalElements || this.users.length;
       },
@@ -39,7 +39,7 @@ export class ListeUsersComponent {
 
   // Modales
   openAddUserModal(modal: any) {
-    this.modalService.open(modal, { size: 'lg' }).result.then(() => this.loadUsers());
+    this.modalService.open(modal, { size: '' }).result.then(() => this.loadUsers());
   }
 
   openInfoUserModal(modal: any, user: any) {
@@ -49,5 +49,10 @@ export class ListeUsersComponent {
 
   openSearchUserModal(modal: any) {
     this.modalService.open(modal, { size: 'lg' });
+  }
+
+  close(): void {
+    this.modalService.dismissAll();
+    this.loadUsers();
   }
 }

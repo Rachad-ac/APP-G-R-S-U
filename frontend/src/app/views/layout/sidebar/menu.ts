@@ -52,9 +52,9 @@ export const MENU: MenuItem[] = [
     roles: ['Admin']
   },
   {
-    label: 'Classes',
+    label: 'Planning',
     icon: 'users',
-    link: '/admin/gestion-planning/classes',
+    link: '/admin/gestion-planning/planning',
     roles: ['Admin']
   },
   {

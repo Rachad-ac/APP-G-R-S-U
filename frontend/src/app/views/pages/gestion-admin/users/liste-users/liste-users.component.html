@@ -9,7 +9,7 @@
     </nav>
 
     <div class="d-flex justify-content-end align-items-center gap-2">
-      <button type="button" class="btn btn-warning btn-icon-text gap-2">
+      <button type="button" class="btn btn-primary btn-icon-text gap-2" (click)="openAddUserModal(addUserModal)">
         <i class="feather icon-plus-circle "></i> Nouvel Utilisateur
       </button>
     </div>
@@ -20,26 +20,40 @@
     <div class="card-body p-0">
       <section class="table-container mat-elevation-z8" tabindex="0">
 
-        <table class="table  table-hover align-middle mb-0">
-          <thead class="table-light bg-primary">
-            <tr>
+        <table class="table align-middle mb-0">
+          <thead class="bg-primary">
+            <tr class="p-5 ">
               <th>Nom</th>
               <th>Prénom</th>
               <th>Email</th>
               <th>Rôle</th>
-              <th class="text-center">Détails</th>
+              <th class="text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let user of users">
+            <tr *ngFor="let user of users" class="mb-0">
               <td>{{ user.nom }}</td>
               <td>{{ user.prenom }}</td>
               <td>{{ user.email }}</td>
-              <td class="text-danger">{{ user.role }}</td>
+              <td>
+                <span *ngIf="user.role == 'Admin' " class="text-danger">{{ user.role }}</span>
+                <span *ngIf="user.role == 'Etudiant' " class="text-success">{{ user.role }}</span>
+                <span *ngIf="user.role == 'Enseignant' " class="text-warning">{{ user.role }}</span>
+              </td>
               <td class="text-center">
-                <button class="btn btn-outline-secondary pb-0 px-3 pt-1">
-                  <mat-icon class="m-0">info</mat-icon>
+                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu d’actions">
+                  <mat-icon>more_vert</mat-icon>
                 </button>
+                <mat-menu #menu="matMenu">
+              <button mat-menu-item>
+                <mat-icon class="text-warning">edit</mat-icon>
+                <span class="text-warning">Modifier</span>
+              </button>
+              <button mat-menu-item>
+                <mat-icon class="text-danger">delete</mat-icon>
+                <span class="text-danger">Supprimer</span>
+              </button>
+            </mat-menu>
               </td>
             </tr>
           </tbody>
@@ -67,3 +81,14 @@
     </div>
   </div>
 </div>
+
+<!-- MODALE : Nouvelle user -->
+<ng-template #addUserModal let-modal>
+  <div class="modal-header mb-0">
+    <h5 class="modal-title" id="addUserModalLabel">Ajouter un nouvel utilisateur</h5>
+    <button type="button" class="btn-close" (click)="modal.close('by: close icon')" aria-label="Close"></button>
+  </div>
+  <div class="bg-warning" style="height: 25rem;">
+     <app-register [isSearch]="false" (submit)="close()"></app-register>
+  </div>
+</ng-template>
