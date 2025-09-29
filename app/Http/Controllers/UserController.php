@@ -12,13 +12,14 @@ class UserController extends Controller
    public function index()
     {
         try {
-            $users = User::paginate(5);
+            $users = User::all();
 
             return response()->json([
                 'success' => true,
                 'data' => $users
             ], 200);
         } catch (\Exception $e) {
+             \Log::error($e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Erreur serveur : ' . $e->getMessage(),

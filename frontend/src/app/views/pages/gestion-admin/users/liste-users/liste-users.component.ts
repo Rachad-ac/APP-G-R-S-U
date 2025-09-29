@@ -23,8 +23,8 @@ export class ListeUsersComponent {
   loadUsers() {
     this.userService.getUsers().subscribe({
       next: res => {
-        console.log(`user ${res}`);
-        this.users = res.payload;
+        console.log(`users : ${res}`);
+        this.users = res.data;
         this.totalUsers = res.metadata?.totalElements || this.users.length;
       },
       error: err => console.error('Erreur lors du chargement des utilisateurs', err)
