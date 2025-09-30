@@ -1,17 +1,13 @@
 <?php
 
 namespace App\Models;
- use HasFactory;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Matiere extends Model
+class Filiere extends Model
 {
-
     protected $fillable = ['nom', 'code', 'description'];
 
-    // Relations (commentées pour tests indépendants)
-    // Une matière possède plusieurs cours
+    // Relations (commentées pour éviter blocage)
     // public function cours()
     // {
     //     return $this->hasMany(Cours::class);
