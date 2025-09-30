@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Reservation;
 use App\Models\Salle;
 use Illuminate\Http\Request;
+use App\Mail\ReservationMail;
+use App\Mail\ValidationMail;
+use Illuminate\Support\Facades\Mail;
+
 
 class ReservationController extends Controller
 {
@@ -22,51 +26,103 @@ class ReservationController extends Controller
             'data' => $reservations
         ]);
     }
-
-    //  Créer une réservation (avec vérification de disponibilité)
-    public function store(Request $request)
+    public function reserver(Request $request)
     {
-
-        $request->validate([
-            'id_user' => 'required|exists:users,id',
-            'id_salle' => 'required|exists:salles,id_salle',
-            'date_debut' => 'required|date|before:date_fin',
-            'date_fin' => 'required|date|after:date_debut',
-            'status'    => 'nullable|in:En attente,Confirmee,Annulee',
-            'type_reservation' => 'required|in:Cours,Examen,Evenement',
+        $reservation = Reservation::create([
+            'user_id' => auth()->id(),
+            'salle_id' => $request->salle_id,
+            'date_reservation' => $request->date_reservation,
         ]);
 
-        // Vérification disponibilité
-        $conflit = Reservation::where('id_salle', $request->id_salle)
-            ->where(function ($q) use ($request) {
-                $q->whereBetween('date_debut', [$request->date_debut, $request->date_fin])
-                  ->orWhereBetween('date_fin', [$request->date_debut, $request->date_fin])
-                  ->orWhere(function ($q2) use ($request) {
-                      $q2->where('date_debut', '<=', $request->date_debut)
-                         ->where('date_fin', '>=', $request->date_fin);
-                  });
-            })
-            ->where('status', '!=', 'Annulee')
-            ->exists();
+        // Mail à l’admin
+        Mail::to('admin@univ.com')->send(new ReservationMail($reservation));
 
-        if ($conflit) {
-            return response()->json(['message' => 'Salle deja reservée pour ce creneau'], 409);
-        }
-
-        $data = $request->all();
-
-        // voir si statut est dans les donnees sinon force "En attente"
-        if (!isset($data['statut'])) {
-            $data['statut'] = 'En attente';
-        }
-
-        $reservation = Reservation::create($data);
-
-        return response()->json([
-            'message' => 'RESERVATION CREE AVEC SUCCES',
-            'reservation' => $reservation
-        ], 201);
+        return response()->json(['message' => 'Demande envoyée avec succès']);
     }
+
+    public function valider($id)
+    {
+        $reservation = Reservation::findOrFail($id);
+        $reservation->statut = 'valide';
+        $reservation->save();
+
+        // Mail au demandeur (peut être étudiant ou enseignant)
+        Mail::to($reservation->user->email)
+            ->send(new ValidationMail($reservation, 'valide'));
+
+        return response()->json(['message' => 'Réservation validée et mail envoyé']);
+    }
+
+    public function refuser($id)
+    {
+        $reservation = Reservation::findOrFail($id);
+        $reservation->statut = 'refuse';
+        $reservation->save();
+
+        Mail::to($reservation->user->email)
+            ->send(new ValidationMail($reservation, 'refuse'));
+
+        return response()->json(['message' => 'Réservation refusée et mail envoyé']);
+    }
+
+
+
+    // Créer une réservation (avec vérification de disponibilité)
+public function store(Request $request)
+{
+    $request->validate([
+        'id_user' => 'required|exists:users,id',
+        'id_salle' => 'required|exists:salles,id_salle',
+        'date_debut' => 'required|date|before:date_fin',
+        'date_fin' => 'required|date|after:date_debut',
+        'statut' => 'nullable|in:En attente,Confirmee,Annulee', // Correction: statut au lieu de status
+        'type_reservation' => 'required|in:Cours,Examen,Evenement',
+    ]);
+
+    // Vérification disponibilité
+    $conflit = Reservation::where('id_salle', $request->id_salle)
+        ->where(function ($q) use ($request) {
+            $q->whereBetween('date_debut', [$request->date_debut, $request->date_fin])
+              ->orWhereBetween('date_fin', [$request->date_debut, $request->date_fin])
+              ->orWhere(function ($q2) use ($request) {
+                  $q2->where('date_debut', '<=', $request->date_debut)
+                     ->where('date_fin', '>=', $request->date_fin);
+              });
+        })
+        ->where('statut', '!=', 'Annulee') // Correction: statut au lieu de status
+        ->exists();
+
+    if ($conflit) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Salle déjà réservée pour ce créneau'
+        ], 409);
+    }
+
+    $data = $request->all();
+
+    // Voir si statut est dans les données sinon force "En attente"
+    if (!isset($data['statut'])) {
+        $data['statut'] = 'En attente';
+    }
+
+    $reservation = Reservation::create($data);
+
+    // Mail à l'admin
+    try {
+        Mail::to('admin@example.com')->send(new ReservationMail($reservation));
+    } catch (\Exception $e) {
+        // Log l'erreur mais ne bloque pas la création
+        \Log::error('Erreur envoi email: ' . $e->getMessage());
+    }
+
+    // UN SEUL return à la fin
+    return response()->json([
+        'success' => true,
+        'message' => 'Réservation créée avec succès',
+        'reservation' => $reservation
+    ], 201);
+}
 
     //  Détails d’une réservation
     public function show($id)
@@ -129,41 +185,4 @@ class ReservationController extends Controller
         return response()->json(['message' => 'Réservation supprimée avec succès']);
     }
 
-    // Valider une réservation
-    public function valider($id)
-    {
-        $reservation = Reservation::findOrFail($id);
-
-        if ($reservation->status === 'Confirmee') {
-            return response()->json([
-                'message' => 'La reservation est deja confirmee'
-            ], 400);
-        }
-
-        $reservation->update(['status' => 'Confirmee']);
-
-        return response()->json([
-            'message' => 'Reservation validee avec succes',
-            'reservation' => $reservation
-        ], 200);
-    }
-
-    // Rejeter une réservation
-    public function rejeter($id)
-    {
-        $reservation = Reservation::findOrFail($id);
-
-        if ($reservation->status === 'Annulee') {
-            return response()->json([
-                'message' => 'La reservation est deja annulee'
-            ], 400);
-        }
-
-        $reservation->update(['status' => 'Annulee']);
-
-        return response()->json([
-            'message' => 'Reservation rejetee avec succes',
-            'reservation' => $reservation
-        ], 200);
-    }
 }
