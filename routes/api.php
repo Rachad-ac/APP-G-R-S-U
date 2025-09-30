@@ -12,6 +12,8 @@ use App\Http\Controllers\SalleController;
 use App\Models\Reservation;
 use App\Http\Controllers\EquipementController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\FiliereController;
+
 
 
 // ====================
@@ -27,20 +29,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // Profil utilisateur connecté
     Route::get('/user/{id}', fn (Request $request) => $request->user());
     Route::post('/logout', [AuthController::class, 'logout']);
-    
-     // Routes Matière
-    Route::get('/matieres', [MatiereController::class, 'index']);
-    Route::post('/matieres', [MatiereController::class, 'store']);
-    Route::get('/matieres/{id}', [MatiereController::class, 'show']);
-    Route::put('/matieres/{id}', [MatiereController::class, 'update']);
-    Route::delete('/matieres/{id}', [MatiereController::class, 'destroy']);
-
-    // Routes Cours
-    Route::get('/cours', [CoursController::class, 'index']);
-    Route::post('/cours', [CoursController::class, 'store']);
-    Route::get('/cours/{id}', [CoursController::class, 'show']);
-    Route::put('/cours/{id}', [CoursController::class, 'update']);
-    Route::delete('/cours/{id}', [CoursController::class, 'destroy']);
 
     // Routes Equipement
     Route::get('/equipements', [EquipementController::class, 'index']);
@@ -91,12 +79,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Routes User uniquement
     Route::middleware('role:User')->group(function () {
-        Route::get('/reservations', [ReservationController::class, 'index']);
-        Route::post('/reservations', [ReservationController::class, 'store']);
-        Route::get('/reservations/{id}', [ReservationController::class, 'show']);
-        Route::put('/reservations/{id}', [ReservationController::class, 'update']);
-        Route::delete('/reservations/{id}', [ReservationController::class, 'destroy']);
-        Route::get('/mes-reservations', [ReservationController::class, 'mesReservations']);
+        Route::get('/filieres', [FiliereController::class, 'index']);
+        Route::post('/filieres', [FiliereController::class, 'store']);
+        Route::get('/filieres/{id}', [FiliereController::class, 'show']);
+        Route::put('/filieres/{id}', [FiliereController::class, 'update']);
+        Route::delete('/filieres/{id}', [FiliereController::class, 'destroy']);
     });
 
     // ====================
@@ -106,8 +93,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/matieres', MatiereController::class , 'store');
     Route::delete('/matieres/{id}', MatiereController::class , 'destroy');
     Route::put('/matieres/update', MatiereController::class , 'update');
-
-    Route::apiResource('cours', CoursController::class);
 
     // Routes partagées
     Route::get('/reservations', [ReservationController::class, 'index']);
