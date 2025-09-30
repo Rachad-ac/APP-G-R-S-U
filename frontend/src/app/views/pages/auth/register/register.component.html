@@ -1,9 +1,10 @@
-<div class="container-fluid w-100 d-flex align-items-center justify-content-center min-vh-100 bg-light">
-  <div class="col-12 col-md-8 col-xl-5 col-xxl-4">
-    <div class="card shadow">
+
+<div class="" *ngIf = "showRegisterModal">
+    <div class="card shadow-sm">
       <!-- En-tête bleu -->
-      <div class="card-header bg-primary text-white text-center py-3">
-        <h3 class="fw-normal mb-0">Inscription</h3>
+      <div class="card-header bg-primary text-white py-3 d-flex justify-content-between">
+        <h4 class="fw-normal mb-0">Ajouter un nouvel utilisateur</h4>
+        <button type="button" class="btn-close" (click)="closeRegisterModal()" aria-label="Close"></button>
       </div>
 
       <!-- Corps avec les inputs -->
@@ -97,7 +98,7 @@
             </div>
 
             <div class="col-md-6">
-              <label for="password_confirmation" class="form-label">Confirmation du mot de passe <span class="text-danger">*</span></label>
+              <label for="password_confirmation" class="form-label">Confirmation mot de passe <span class="text-danger">*</span></label>
               <input 
                 type="password" 
                 class="form-control" 
@@ -135,15 +136,9 @@
           </button>
         </div>
         
-        <div class="text-muted">
-          <small>
-            Déjà un compte ? 
-            <a routerLink="/login" class="text-primary text-decoration-none fw-medium">
-              Se connecter
-            </a>
-          </small>
+        <div class="text-center">
+          <h4>Smart<span class="text-warning">Univ</span></h4>
         </div>
       </div>
     </div>
   </div>
-</div>

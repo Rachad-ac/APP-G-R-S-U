@@ -5,9 +5,9 @@ import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
 
 const routes: Routes = [
   //declaration des routes ici amin
-  {path: '' , component : ListeUsersComponent},
+  {path: '' , component : DashboardComponent},
+  { path: 'dashboard', component: DashboardComponent},
   {path: 'users' , component : ListeUsersComponent},
-   { path: 'dashboard', component: DashboardComponent}
 ];
 
 @NgModule({

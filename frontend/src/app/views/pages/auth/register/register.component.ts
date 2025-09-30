@@ -41,9 +41,6 @@ export class RegisterComponent implements OnInit {
     this.authService.register(this.registerData).subscribe({
       next: (res) => {
         this.message = "Inscription réussie ! ";
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 1500);
       },
       error: (err) => {
         console.error(err);
@@ -51,4 +48,8 @@ export class RegisterComponent implements OnInit {
       }
     });
   }
+showRegisterModal : boolean = true;
+closeRegisterModal() {
+  this.showRegisterModal = false;
+}
 }

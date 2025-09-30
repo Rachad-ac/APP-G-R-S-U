@@ -14,13 +14,13 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
 
     // Profil utilisateur connecté
-    Route::get('/user', fn (Request $request) => $request->user());
+    Route::get('/user/{id}', fn (Request $request) => $request->user());
     Route::post('/logout', [AuthController::class, 'logout']);
 
     // Routes Admin uniquement
     Route::middleware('role:Admin')->group(function () {
         Route::get('/users', [UserController::class, 'index']);
-        Route::delete('/users/{id}', [UserController::class, 'destroy']);
+        Route::delete('/user/{id}', [UserController::class, 'destroy']);
 
         // Gestion des équipements (CRUD)
         Route::apiResource('equipements', EquipementController::class);
