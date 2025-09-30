@@ -14,6 +14,15 @@ class ReservationController extends Controller
         return Reservation::with(['salle', 'user'])->get();
     }
 
+    public function mesReservations(Request $request, $id) {
+        $reservations = Reservation::where('id_user', $id)->get();
+        
+        return response()->json([
+            'success' => true,
+            'data' => $reservations
+        ]);
+    }
+
     //  Créer une réservation (avec vérification de disponibilité)
     public function store(Request $request)
     {

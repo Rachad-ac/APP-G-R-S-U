@@ -1,20 +1,27 @@
 <?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\CoursController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SalleController;
 use App\Models\Reservation;
+use App\Http\Controllers\EquipementController;
+use App\Http\Controllers\RoleController;
 
+
+// ====================
 // Routes publiques
+// ====================
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// Routes protégées (authentification requise)
+// ====================
+// Routes protégées (auth:sanctum)
 Route::middleware('auth:sanctum')->group(function () {
 
     // Profil utilisateur connecté
@@ -45,48 +52,36 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Route réservée uniquement aux admins
     Route::middleware('role:Admin')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'stats']);
         Route::get('/users', [UserController::class, 'index']);
         Route::delete('/user/{id}', [UserController::class, 'destroy']);
 
-        // Gestion des équipements (CRUD)
+        // Gestion des équipements (CRUD complet)
         Route::apiResource('equipements', EquipementController::class);
 
-        // Gestion des réservations (CRUD)
+        // Gestion des réservations (CRUD complet)
         Route::apiResource('reservations', ReservationController::class);
 
         Route::post('/reservations', [ReservationController::class, 'store']);
         Route::post('/salles/store', [SalleController::class, 'store']);
         Route::post('/salles/update/{id}', [SalleController::class, 'update']);
         Route::delete('salles/delete/{id}' , [SalleController::class , 'destroy']);
-
+        Route::get('/equipements', [EquipementController::class, 'index']);
         Route::put('/reservations/{id}/valider', [ReservationController::class, 'valider']);
         Route::put('/reservations/{id}/rejeter', [ReservationController::class, 'rejeter']);
 
 
     });
 
-    // Route réservée uniquement aux utilisateurs
-    Route::middleware('role:User')->group(function () {
-
-            // routes user ici
-        Route::post('/reservations/ajout', [ReservationController::class, 'store']);
-        Route::get('/reservations/{id}', [ReservationController::class, 'show']);
-        Route::post('/reservations/update/{id}', [ReservationController::class, 'update']);
-
-        });
-
-    //Les autres routes partager ici
     // Routes Enseigant et Etudiant uniquement
     Route::middleware('role:Enseignant' || 'role:Etudiant')->group(function () {
-        // Voir ses propres réservations
+        Route::get('/reservations', [ReservationController::class, 'index']);
+        Route::post('/reservations', [ReservationController::class, 'store']);
+        Route::get('/reservations/{id}', [ReservationController::class, 'show']);
+        Route::put('/reservations/{id}', [ReservationController::class, 'update']);
+        Route::delete('/reservations/{id}', [ReservationController::class, 'destroy']);
         Route::get('/mes-reservations', [ReservationController::class, 'mesReservations']);
     });
-
-
-    // Routes partagées
-    Route::get('/dashboard', [DashboardController::class, 'stats']);
-    Route::get('/equipements', [EquipementController::class, 'index']);
-    Route::get('/reservations', [ReservationController::class, 'index']);
 
     // Routes Admin uniquement
     Route::middleware('role:Admin')->group(function () {
@@ -103,5 +98,18 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/reservations/{id}', [ReservationController::class, 'destroy']);
         Route::get('/mes-reservations', [ReservationController::class, 'mesReservations']);
     });
+
+    // ====================
+    // Routes pour Matières & Cours (accessibles aux utilisateurs connectés)
+    // ====================
+    Route::get('/matieres', MatiereController::class , 'index');
+    Route::post('/matieres', MatiereController::class , 'store');
+    Route::delete('/matieres/{id}', MatiereController::class , 'destroy');
+    Route::put('/matieres/update', MatiereController::class , 'update');
+
+    Route::apiResource('cours', CoursController::class);
+
+    // Routes partagées
+    Route::get('/reservations', [ReservationController::class, 'index']);
 
 });
