@@ -17,6 +17,7 @@ class ReservationController extends Controller
     //  Créer une réservation (avec vérification de disponibilité)
     public function store(Request $request)
     {
+
         $request->validate([
             'id_user' => 'required|exists:users,id',
             'id_salle' => 'required|exists:salles,id_salle',
@@ -68,6 +69,7 @@ class ReservationController extends Controller
     // Mettre à jour une réservation
     public function update(Request $request, $id)
     {
+
         $reservation = Reservation::findOrFail($id);
 
         $request->validate([
