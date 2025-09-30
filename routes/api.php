@@ -85,14 +85,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/filieres/{id}', [FiliereController::class, 'update']);
         Route::delete('/filieres/{id}', [FiliereController::class, 'destroy']);
     });
-
+    
     // ====================
     // Routes pour Matières & Cours (accessibles aux utilisateurs connectés)
     // ====================
-    Route::get('/matieres', MatiereController::class , 'index');
-    Route::post('/matieres', MatiereController::class , 'store');
-    Route::delete('/matieres/{id}', MatiereController::class , 'destroy');
-    Route::put('/matieres/update', MatiereController::class , 'update');
+    Route::get('/matieres', [MatiereController::class , 'index']);
+    Route::post('/matieres', [MatiereController::class , 'store']);
+    Route::delete('/matieres/{id}', [MatiereController::class , 'destroy']);
+    Route::put('/matieres/update', [MatiereController::class , 'update']);
 
     // Routes partagées
     Route::get('/reservations', [ReservationController::class, 'index']);

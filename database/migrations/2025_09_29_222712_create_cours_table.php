@@ -12,8 +12,9 @@ return new class extends Migration {
             $table->string('code');
             $table->text('description')->nullable();
             $table->unsignedBigInteger('id_matiere');
+            $table->unsignedBigInteger('id_filiere');
             $table->foreign('id_matiere')->references('id_matiere')->on('matieres')->onDelete('cascade');
-            $table->foreign('id_filiere')->references('id_filiere')->on('matieres')->onDelete('cascade');
+            $table->foreign('id_filiere')->references('id_filiere')->on('filieres')->onDelete('cascade');
             $table->timestamps();
         });
     }
