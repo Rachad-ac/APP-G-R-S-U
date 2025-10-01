@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <title>Demande de réservation</title>
     <style>
+        /* Styles inline pour compatibilité avec Gmail/Outlook */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f6f9;
             margin: 0;
-            padding: 0;
+            padding: 20px;
         }
         .card {
             max-width: 600px;
-            margin: 30px auto;
+            margin: 0 auto;
             background: #ffffff;
             border-radius: 8px;
             border: 1px solid #ddd;
@@ -57,7 +58,6 @@
             background: #f8f9fa;
         }
     </style>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -66,8 +66,8 @@
             📌 Demande de Réservation
         </div>
         <div class="card-body">
-            
-            @if($reservation->user->id_role === 2)
+
+            @if($reservation->user->role === 'Etudiant')
                 <p>
                     👨‍🎓 <strong>Étudiant :</strong> {{ $reservation->user->prenom }} {{ $reservation->user->nom }}
                 </p>
@@ -80,8 +80,9 @@
             <p>
                 a fait une demande de réservation pour la salle  
                 <span class="badge">{{ $reservation->salle->nom }}</span> 
-                le <strong>{{ $reservation->date_reservation }}</strong> 
-                de <strong>{{ $reservation->date_debut }}</strong> à <strong>{{ $reservation->date_fin }}</strong>.
+                le <strong>{{ \Carbon\Carbon::parse($reservation->date_reservation)->format('d/m/Y') }}</strong> 
+                de <strong>{{ \Carbon\Carbon::parse($reservation->date_debut)->format('H:i') }}</strong> 
+                à <strong>{{ \Carbon\Carbon::parse($reservation->date_fin)->format('H:i') }}</strong>.
             </p>
 
             <div class="alert">

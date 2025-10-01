@@ -29,11 +29,7 @@ class User extends Authenticatable
 
    public function role()
     {
-<<<<<<< HEAD
        return $this->belongsTo(Role::class, 'role', 'role');
-=======
-        return $this->belongsTo(Role::class, 'id_role', 'id_role');
->>>>>>> origin/jerry
     }
 
     /**

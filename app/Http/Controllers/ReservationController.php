@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reservation;
 use App\Models\Salle;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Mail\ReservationMail;
 use App\Mail\ValidationMail;
@@ -26,16 +27,28 @@ class ReservationController extends Controller
             'data' => $reservations
         ]);
     }
+
     public function reserver(Request $request)
     {
         $reservation = Reservation::create([
-            'user_id' => auth()->id(),
-            'salle_id' => $request->salle_id,
-            'date_reservation' => $request->date_reservation,
+            'id_user' =>$request->id_user,
+            'id_salle' => $request->salle_id,
+            'date_debut' => $request->date_debut,
+            'date_fin' => $request->date_fin,
+            'type_reservation' => $request->type_reservation
         ]);
 
         // Mail à l’admin
-        Mail::to('admin@univ.com')->send(new ReservationMail($reservation));
+        Mail::to('bent35005@gmail.com')->send(new ReservationMail($reservation));
+
+        // Sauvegarder en base une notification pour l’admin
+        Notification::create([
+            'message' => "Nouvelle demande de réservation pour la salle {$reservation->salle->nom}",
+            'dateEnvoi' => now(),
+            'lu' => false,
+            'id_user' => 1, 
+            'id_reservation' => $reservation->id_reservation,
+        ]);
 
         return response()->json(['message' => 'Demande envoyée avec succès']);
     }
@@ -50,7 +63,16 @@ class ReservationController extends Controller
         Mail::to($reservation->user->email)
             ->send(new ValidationMail($reservation, 'valide'));
 
-        return response()->json(['message' => 'Réservation validée et mail envoyé']);
+        // Sauvegarder en base une notification pour le demandeur
+        Notification::create([
+            'message'       => "Votre réservation de la salle {$reservation->salle->nom} a été validée.",
+            'dateEnvoi'     => now(),
+            'lu'            => false,
+            'id_user'        => $reservation->id_user,
+            'id_reservation' => $reservation->id_reservation,
+        ]);
+
+        return response()->json(['message' => 'Réservation validée, mail envoyé et notification enregistrée']);
     }
 
     public function refuser($id)
@@ -62,7 +84,16 @@ class ReservationController extends Controller
         Mail::to($reservation->user->email)
             ->send(new ValidationMail($reservation, 'refuse'));
 
-        return response()->json(['message' => 'Réservation refusée et mail envoyé']);
+        // Sauvegarder en base une notification pour le demandeur
+        Notification::create([
+            'message'       => "Votre réservation de la salle {$reservation->salle->nom} a été refusée.",
+            'dateEnvoi'     => now(),
+            'lu'            => false,
+            'id_user'        => $reservation->id_user,
+            'id_reservation' => $reservation->id_reservation,
+        ]);
+
+        return response()->json(['message' => 'Réservation refusée, mail envoyé et notification enregistrée']);
     }
 
 
@@ -75,7 +106,7 @@ public function store(Request $request)
         'id_salle' => 'required|exists:salles,id_salle',
         'date_debut' => 'required|date|before:date_fin',
         'date_fin' => 'required|date|after:date_debut',
-        'statut' => 'nullable|in:En attente,Confirmee,Annulee', // Correction: statut au lieu de status
+        'statut' => 'nullable|in:En attente,Confirmee,Annulee',
         'type_reservation' => 'required|in:Cours,Examen,Evenement',
     ]);
 
@@ -110,7 +141,17 @@ public function store(Request $request)
 
     // Mail à l'admin
     try {
-        Mail::to('admin@example.com')->send(new ReservationMail($reservation));
+        Mail::to('bent35005@gmail.com')->send(new ReservationMail($reservation));
+
+        // Sauvegarder en base une notification pour l’admin
+        Notification::create([
+            'message' => "Nouvelle demande de réservation pour la salle {$reservation->salle->nom}",
+            'dateEnvoi' => now(),
+            'lu' => false,
+            'id_user' => 1, 
+            'id_reservation' => $reservation->id_reservation,
+        ]);
+
     } catch (\Exception $e) {
         // Log l'erreur mais ne bloque pas la création
         \Log::error('Erreur envoi email: ' . $e->getMessage());
@@ -119,7 +160,7 @@ public function store(Request $request)
     // UN SEUL return à la fin
     return response()->json([
         'success' => true,
-        'message' => 'Réservation créée avec succès',
+        'message' => 'Réservation créée avec succès et Demande envoyée avec succès',
         'reservation' => $reservation
     ], 201);
 }

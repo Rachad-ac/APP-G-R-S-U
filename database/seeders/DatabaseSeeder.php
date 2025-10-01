@@ -12,15 +12,13 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RoleSeeder::class,
-            // TypeSalleSeeder::class,
         ]);
 
         User::create([
-            'nom' => 'Admin',
-            'prenom' => 'Test',
-            'email' => 'admin@example.com',
-
-            'password' => 'admin123',
+            'nom' => 'Rachad',
+            'prenom' => 'Ahmed Combo',
+            'email' => 'bent35005@gmail.com',
+            'password' => 'rachad123',
             'role' => 'Admin',
         ]);
 

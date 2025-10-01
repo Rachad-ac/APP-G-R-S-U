@@ -9,20 +9,16 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\CoursController;
 use App\Http\Controllers\SalleController;
-use App\Models\Reservation;
 use App\Http\Controllers\EquipementController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\FiliereController;
+use App\Http\Controllers\NotificationController;
 
 
-
-// ====================
 // Routes publiques
-// ====================
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// ====================
 // Routes protégées (auth:sanctum)
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -43,13 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'stats']);
         Route::get('/users', [UserController::class, 'index']);
         Route::delete('/user/{id}', [UserController::class, 'destroy']);
-
-        // Gestion des équipements (CRUD complet)
-        Route::apiResource('equipements', EquipementController::class);
-
-        // Gestion des réservations (CRUD complet)
-        Route::apiResource('reservations', ReservationController::class);
-
+        
         Route::post('/reservations', [ReservationController::class, 'store']);
         Route::post('/salles/store', [SalleController::class, 'store']);
         Route::post('/salles/update/{id}', [SalleController::class, 'update']);
@@ -58,13 +48,19 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/reservations/{id}/valider', [ReservationController::class, 'valider']);
         Route::put('/reservations/{id}/rejeter', [ReservationController::class, 'rejeter']);
 
+        Route::get('/filieres', [FiliereController::class, 'index']);
+        Route::post('/filieres', [FiliereController::class, 'store']);
+        Route::get('/filieres/{id}', [FiliereController::class, 'show']);
+        Route::put('/filieres/{id}', [FiliereController::class, 'update']);
+        Route::delete('/filieres/{id}', [FiliereController::class, 'destroy']);
+
 
     });
 
     // Routes Enseigant et Etudiant uniquement
     Route::middleware('role:Enseignant' || 'role:Etudiant')->group(function () {
         Route::get('/reservations', [ReservationController::class, 'index']);
-        Route::post('/reservations', [ReservationController::class, 'store']);
+        Route::post('/reservations', [ReservationController::class, 'reserver']);
         Route::get('/reservations/{id}', [ReservationController::class, 'show']);
         Route::put('/reservations/{id}', [ReservationController::class, 'update']);
         Route::delete('/reservations/{id}', [ReservationController::class, 'destroy']);
@@ -76,25 +72,17 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/users', [UserController::class, 'index']);
         Route::delete('/users/{id}', [UserController::class, 'destroy']);
     });
-
-    // Routes User uniquement
-    Route::middleware('role:User')->group(function () {
-        Route::get('/filieres', [FiliereController::class, 'index']);
-        Route::post('/filieres', [FiliereController::class, 'store']);
-        Route::get('/filieres/{id}', [FiliereController::class, 'show']);
-        Route::put('/filieres/{id}', [FiliereController::class, 'update']);
-        Route::delete('/filieres/{id}', [FiliereController::class, 'destroy']);
-    });
     
-    // ====================
+
     // Routes pour Matières & Cours (accessibles aux utilisateurs connectés)
-    // ====================
+
     Route::get('/matieres', [MatiereController::class , 'index']);
     Route::post('/matieres', [MatiereController::class , 'store']);
     Route::delete('/matieres/{id}', [MatiereController::class , 'destroy']);
     Route::put('/matieres/update', [MatiereController::class , 'update']);
 
-    // Routes partagées
-    Route::get('/reservations', [ReservationController::class, 'index']);
+    Route::get('/notifications/{userId}', [NotificationController::class, 'index']); 
+    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead']); 
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
 
 });

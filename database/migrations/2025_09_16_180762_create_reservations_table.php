@@ -10,8 +10,8 @@ return new class extends Migration {
             $table->id('id_reservation'); // id de la réservation
             $table->dateTime('date_debut');
             $table->dateTime('date_fin');
-            $table->enum('type_reservation', ['Cours', 'Examen', 'Evenement']); // type de réservation
-            $table->enum('status', ['En attente', 'Confirmee', 'Annulee'])->default('En attente');
+            $table->enum('type_reservation', ['Cours', 'Examen', 'Evenement' , 'TP']); // type de réservation
+            $table->enum('statuT', ['En attente', 'Confirmee', 'Annulee'])->default('En attente');
 
             // Clés étrangères
             $table->unsignedBigInteger('id_user'); 

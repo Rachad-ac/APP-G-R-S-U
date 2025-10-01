@@ -24,8 +24,21 @@ class ReservationMail extends Mailable
     {
         return $this->subject('Nouvelle demande de réservation')
                     ->view('emails.reservation')
-                    ->withSwiftMessage(function ($message) {
-                        $message->getHeaders()->addTextHeader('X-Mailer', 'Laravel');
-                    });
+                    ->with([
+                        'reservation' => $this->reservation,
+                    ]);
+    }
+
+    /**
+     * Ajout de headers personnalisés (optionnel, compatible Laravel 9+)
+     */
+    public function envelope()
+    {
+        return new \Illuminate\Mail\Mailables\Envelope(
+            subject: 'Nouvelle demande de réservation',
+            headers: [
+                'X-Mailer' => 'Laravel'
+            ]
+        );
     }
 }
