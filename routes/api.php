@@ -24,6 +24,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('reservations/delete/{id}' , [ReservationController::class , 'destroy']);
     Route::get('/salles/search', [SalleController::class, 'search']);
     Route::get('/reservations/search', [ReservationController::class, 'search']);
+    Route::get('/users/{id}/mesreservations', [ReservationController::class, 'mesreservations']);
+
 
 
 

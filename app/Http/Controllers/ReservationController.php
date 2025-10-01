@@ -108,6 +108,23 @@ class ReservationController extends Controller
 
         return response()->json($reservations);
     }
+    public function mesreservations($id_user)
+    {
+        $reservations = Reservation::with(['salle', 'user'])
+            ->where('id_user', $id_user)
+            ->get();
+
+        if ($reservations->isEmpty()) {
+            return response()->json([
+                'message' => 'Aucune réservation trouvée pour cet utilisateur'
+            ], 404);
+        }
+
+        return response()->json([
+            'utilisateur' => $id_user,
+            'reservations' => $reservations
+        ], 200);
+    }
 
     // Supprimer une réservation
     public function destroy($id)
