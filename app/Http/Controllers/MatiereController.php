@@ -93,9 +93,9 @@ class MatiereController extends Controller
     /**
      * Supprimer une matière
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        $matiere = Matiere::find($id);
+        $matiere = Matiere::firstOrFail($id);
 
         if (!$matiere) {
             return response()->json([

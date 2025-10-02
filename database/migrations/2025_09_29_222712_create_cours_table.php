@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void {
         Schema::create('cours', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_cours');
             $table->string('nom');
             $table->string('code');
             $table->text('description')->nullable();

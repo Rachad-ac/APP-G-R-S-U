@@ -1,0 +1,29 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up(): void
+    {
+        Schema::create('plannings', function (Blueprint $table) {
+            $table->id('id_planning');
+            $table->unsignedBigInteger('id_salle');
+            $table->unsignedBigInteger('id_user'); 
+            $table->dateTime('date_debut');
+            $table->dateTime('date_fin');
+            $table->string('description')->nullable();
+            $table->timestamps();
+
+            $table->foreign('id_salle')->references('id_salle')->on('salles')->onDelete('cascade');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('plannings');
+    }
+};
+

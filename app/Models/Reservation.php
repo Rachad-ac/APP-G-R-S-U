@@ -15,10 +15,11 @@ class Reservation extends Model
     protected $fillable = [
         'id_user',
         'id_salle',
+        'id_cours',
         'date_debut',
         'date_fin',
         'type_reservation',
-        'status',
+        'statut',
     ];
 
     // Une réservation appartient à un utilisateur
@@ -31,6 +32,12 @@ class Reservation extends Model
     public function salle()
     {
         return $this->belongsTo(Salle::class, 'id_salle', 'id_salle');
+    }
+
+    // Une réservation concerne une salle
+    public function cours()
+    {
+        return $this->belongsTo(Cours::class, 'id_cours', 'id_cours');
     }
 }
 
