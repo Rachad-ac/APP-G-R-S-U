@@ -1,0 +1,129 @@
+<!-- EN-TÊTE AVEC BREADCRUMB ET BOUTONS -->
+<div class="d-flex justify-content-between align-items-center flex-wrap grid-margin mb-1">
+  <nav class="page-breadcrumb cursor-pointer">
+    <ol class="breadcrumb mb-0">
+      <li class="breadcrumb-item active"><a>Liste des Utilisateurs</a></li>
+    </ol>
+  </nav>
+
+  <div class="d-flex justify-content-end align-items-center gap-2">
+    <!-- Bouton Recherche -->
+    <button type="button" class="btn btn-secondary btn-icon me-2">
+      <i class="feather icon-search"></i>
+    </button>
+    <!-- Bouton Ajouter -->
+    <button type="button" class="btn btn-primary btn-icon-text"  (click)="openRegisterModal()">
+      <i class="feather icon-plus-circle"></i> Nouvel Utilisateur
+    </button>
+    <div *ngIf="showRegisterModal">
+      <div class="container">
+        <app-register (submit)="closeRegisterModal()"></app-register>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABLEAU DES UTILISATEURS -->
+<div class="card mt-4">
+  <div class="card-body p-0">
+    <section class="table-container mat-elevation-z8" tabindex="0">
+
+      <table mat-table [dataSource]="dataSource?.data">
+
+        <!-- Nom -->
+        <ng-container matColumnDef="nom">
+          <th mat-header-cell *matHeaderCellDef class="table-head-text">Nom</th>
+          <td mat-cell *matCellDef="let user">{{ user.nom }}</td>
+        </ng-container>
+
+        <!-- Prénom -->
+        <ng-container matColumnDef="prenom">
+          <th mat-header-cell *matHeaderCellDef class="table-head-text">Prénom</th>
+          <td mat-cell *matCellDef="let user">{{ user.prenom }}</td>
+        </ng-container>
+
+        <!-- Email -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef class="table-head-text">Email</th>
+          <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+        </ng-container>
+
+        <!-- Rôle -->
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef class="table-head-text text-center">Rôle</th>
+          <td mat-cell *matCellDef="let user" class="text-center">
+            <span *ngIf="user.role == 'Admin'" class="text-danger">{{ user.role }}</span>
+            <span *ngIf="user.role == 'Etudiant'" class="text-success">{{ user.role }}</span>
+            <span *ngIf="user.role == 'Enseignant'" class="text-warning">{{ user.role }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Actions -->
+        <ng-container matColumnDef="actions" stickyEnd>
+          <th mat-header-cell *matHeaderCellDef class="table-head-text">Actions</th>
+          <td mat-cell *matCellDef="let user">
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu d’actions">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item >
+                <mat-icon class="text-warning">edit</mat-icon>
+                <span class="text-warning">Modifier</span>
+              </button>
+              <button mat-menu-item (click)="deleteUser(user)">
+                <mat-icon class="text-danger">delete</mat-icon>
+                <span class="text-danger">Supprimer</span>
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        <!-- Rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="table-head-bg"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <!-- Message si vide -->
+      <span *ngIf="dataSource?.payload?.length === 0" class="paginate text-danger mt-4">
+        Chergemment en cours...
+      </span>
+
+      <!-- Pagination -->
+      <div class="paginate">
+        <ngb-pagination
+          [collectionSize]="dataSource?.metadata?.totalElements"
+          [page]="pageOptions.page + 1"
+          [pageSize]="pageOptions.size"
+          [maxSize]="5"
+          (pageChange)="paginate($event)"
+          size="sm"
+          [rotate]="true"
+          [ellipses]="true"
+          [boundaryLinks]="true">
+        </ngb-pagination>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!--
+<ng-template #SearchUserModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Recherche Utilisateur</h5>
+    <button type="button" class="btn-close" (click)="modal.close('close')" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <app-register [isSearch]="true" (search)="doSearch($event)" (submit)="close()"></app-register>
+  </div>
+</ng-template>
+
+
+<ng-template #EditUserModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modifier Utilisateur</h5>
+    <button type="button" class="btn-close" (click)="modal.close('close')" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <app-register [isSearch]="false" [userToUpdate]="userToUpdate" (submit)="close()"></app-register>
+  </div>
+</ng-template> -->

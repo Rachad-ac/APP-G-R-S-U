@@ -1,0 +1,77 @@
+<div class="container-fluid w-100 d-flex align-items-center justify-content-center min-vh-100 bg-light">
+  <div class="col-12 col-md-8 col-xl-4 col-xxl-4">
+    <div class="card shadow">
+      <!-- En-tête -->
+      <div class="card-header bg-primary text-white text-center py-3">
+        <h3 class="fw-normal mb-0">Connexion</h3>
+      </div>
+
+      <!-- Corps -->
+      <div class="card-body px-4 py-4">
+        <form #loginForm="ngForm" class="needs-validation" novalidate>
+          <div class="mb-3">
+            <label for="email" class="form-label">E-mail <span class="text-danger">*</span></label>
+            <input 
+              type="email" 
+              class="form-control" 
+              id="email" 
+              name="email"
+              ngModel
+              autocomplete="email"
+              placeholder="votre.email@exemple.com"
+              required>
+            <div class="invalid-feedback">
+              Veuillez saisir une adresse e-mail valide.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Mot de passe <span class="text-danger">*</span></label>
+            <input 
+              type="password" 
+              class="form-control" 
+              id="password" 
+              name="password"
+              ngModel
+              autocomplete="current-password"
+              placeholder="Votre mot de passe"
+              required>
+            <div class="invalid-feedback">
+              Veuillez saisir votre mot de passe.
+            </div>
+          </div>
+
+          <!-- Message d'erreur -->
+          <div class="mb-3" *ngIf="message">
+            <div class="alert alert-warning alert-dismissible text-warning show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          </div>
+
+          <!-- Bouton connexion -->
+          <div class="d-grid gap-2 mb-3">
+            <button 
+              type="submit" 
+              class="btn btn-primary btn-sm" 
+              (click)="onLoggedin($event, loginForm.value)">
+              <i class="fas fa-sign-in-alt me-2"></i> Se connecter
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Pied -->
+      <div class="card-footer bg-white text-center py-4">
+        <div class="text-muted">
+          <small>
+            Besoin d'un compte ? 
+            <a routerLink="/register" class="text-primary text-decoration-none fw-medium">
+              S'inscrire
+            </a>
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

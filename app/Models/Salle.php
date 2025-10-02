@@ -21,8 +21,9 @@ class Salle extends Model
     {
         return $this->hasMany(Reservation::class, 'id_salle', 'id_salle');
     }
-    // public function equipements()
-    // {
-    //     return $this->hasMany(Equipement::class, 'id_salle');
-    // }
+    
+    public function equipements()
+     {
+         return $this->hasMany(Equipement::class, 'id_salle');
+     }
 }

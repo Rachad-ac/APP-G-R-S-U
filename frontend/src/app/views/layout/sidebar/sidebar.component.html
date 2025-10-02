@@ -1,0 +1,85 @@
+<nav class="sidebar">
+  <div class="sidebar-header">
+
+    <!-- Logo -->
+    <a routerLink="/" class="sidebar-brand nobleui-logo">
+      <h3>Smart<span class="fw-bold text-warning">Univ</span></h3>
+    </a>
+
+    <!-- Sidebar toggler -->
+    <div class="sidebar-toggler active" #sidebarToggler (click)="toggleSidebar($event)">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
+  <div class="sidebar-body" (mouseenter)="operSidebarFolded()" (mouseleave)="closeSidebarFolded()" [perfectScrollbar]>
+
+    <ul class="sidebar-nav metismenu" id="sidebar-menu" #sidebarMenu>
+      <ng-container *ngFor="let item of menuItems">
+        <!-- Title -->
+        <li class="nav-item nav-category" *ngIf="item.isTitle">{{ item.label }}</li>
+
+        <!-- Menu item -->
+        <li class="nav-item" *ngIf="!item.isTitle">
+          
+          <!-- Dropdown menu -->
+          <a class="nav-link" *ngIf="hasItems(item)" href="javascript:void(0);" >
+            <i class="link-icon" [attr.data-feather]="item.icon" appFeatherIcon *ngIf="item.icon"></i>
+            <span class="link-title">{{ item.label }}</span>
+            <span class="link-arrow" data-feather="chevron-down" appFeatherIcon></span>
+          </a>
+
+          <!-- Single link -->
+          <a class="nav-link nav-link-ref" [routerLink]="item.link" *ngIf="!hasItems(item)">
+            <i class="link-icon" [attr.data-feather]="item.icon" appFeatherIcon *ngIf="item.icon"></i>
+            <span class="link-title">{{ item.label }}</span>
+          </a>
+
+          <!-- Sub-menu -->
+          <ul class="sidebar-nav sub-menu nav-second-level" *ngIf="hasItems(item)">
+            <ng-container *ngFor="let subitem of item.subItems">
+              <!-- Vérifier rôle pour sous-items -->
+              <ng-container *ngIf="!subitem.roles || subitem.roles.includes(currentUser.role)">
+                
+                <li class="nav-item" [ngClass]="{'side-nav-item': hasItems(subitem)}">
+                  
+                  <!-- Sous-menu dropdown -->
+                  <a class="nav-link side-nav-link-a-ref" *ngIf="hasItems(subitem)" href="javascript:void(0);">
+                    <i class="link-icon" [attr.data-feather]="subitem.icon" appFeatherIcon *ngIf="subitem.icon"></i>
+                    <span class="link-title">{{ subitem.label }}</span>
+                    <span class="link-arrow" data-feather="chevron-down" appFeatherIcon></span>
+                  </a>
+
+                  <!-- Lien simple -->
+                  <a class="nav-link nav-link-ref" [routerLink]="subitem.link" *ngIf="!hasItems(subitem)">
+                    <i class="link-icon" [attr.data-feather]="subitem.icon" appFeatherIcon *ngIf="subitem.icon"></i>
+                    {{ subitem.label }}
+                  </a>
+
+                  <!-- Niveau 3 -->
+                  <ul class="sidebar-nav sub-menu nav-third-level" *ngIf="hasItems(subitem)">
+                    <ng-container *ngFor="let subSubitem of subitem.subItems">
+                      <ng-container *ngIf="!subSubitem.roles || subSubitem.roles.includes(currentUser.role)">
+                        <li class="nav-item">
+                          <a class="nav-link nav-link-ref" [routerLink]="subSubitem.link">
+                            <i class="link-icon" [attr.data-feather]="subSubitem.icon" appFeatherIcon *ngIf="subSubitem.icon"></i>
+                            {{ subSubitem.label }}
+                          </a>
+                        </li>
+                      </ng-container>
+                    </ng-container>
+                  </ul>
+
+                </li>
+              </ng-container>
+            </ng-container>
+          </ul>
+
+        </li>
+      </ng-container>
+    </ul>
+
+  </div>
+</nav>

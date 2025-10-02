@@ -24,12 +24,12 @@ class User extends Authenticatable
         'prenom',
         'email',
         'password',
-        'id_role',
+        'role',
     ];
 
    public function role()
     {
-        return $this->belongsTo(Role::class, 'id_role', 'id_role');
+       return $this->belongsTo(Role::class, 'role', 'role');
     }
 
     /**
