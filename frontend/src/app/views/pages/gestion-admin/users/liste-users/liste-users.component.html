@@ -106,6 +106,16 @@
   </div>
 </div>
 
+<ng-template #AddhUserModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title"> Utilisateur</h5>
+    <button type="button" class="btn-close" (click)="modal.close('close')" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <app-register (submit)="close()"></app-register>
+  </div>
+</ng-template>
+
 <!--
 <ng-template #SearchUserModal let-modal>
   <div class="modal-header">

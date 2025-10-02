@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->dateTime('date_debut');
             $table->dateTime('date_fin');
             $table->enum('type_reservation', ['Cours', 'Examen', 'Evenement' , 'TP']); // type de réservation
-            $table->enum('statuT', ['En attente', 'Confirmee', 'Annulee'])->default('En attente');
+            $table->enum('statut', ['En attente', 'Validée','Refusée' ,'Annulee'])->default('En attente');
 
             // Clés étrangères
             $table->unsignedBigInteger('id_user'); 
@@ -23,8 +23,8 @@ return new class extends Migration {
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('id_salle')->references('id_salle')->on('salles')->onDelete('cascade');
         
-            // $table->unsignedBigInteger('id_cours')->nullable();
-            // $table->foreign('id_cours')->references('id_cours')->on('cours')->onDelete('set null');
+            $table->unsignedBigInteger('id_cours')->nullable();
+            $table->foreign('id_cours')->references('id_cours')->on('cours')->onDelete('set null');
 
         });
     }
