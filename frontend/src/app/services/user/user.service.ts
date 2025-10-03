@@ -13,4 +13,16 @@ export class UserService {
   getUsers(): Observable<any> {
     return this.http.get<any>(`${environment.baseUrl}users`);
   }
+
+  getUserById(userId : any): Observable<any> {
+    return this.http.get<any>(`${environment.baseUrl}user/${userId}`);
+  }
+
+  deleteUser(userId : any): Observable<any> {
+    return this.http.delete<any>(`${environment.baseUrl}user/${userId}`);
+  }
+
+  updateUser(userId: any, user: any): Observable<any> {
+    return this.http.put<any>(`${environment.baseUrl}user/${userId}`, user);
+  }
 }
