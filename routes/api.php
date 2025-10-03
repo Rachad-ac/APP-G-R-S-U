@@ -92,7 +92,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/reservations/{id}', [ReservationController::class, 'show']);
         Route::put('/reservations/{id}', [ReservationController::class, 'update']);
         Route::delete('/reservations/{id}', [ReservationController::class, 'destroy']);
-        Route::get('/mes-reservations', [ReservationController::class, 'mesReservations']);
+        Route::get('/mes-reservations/{id}', [ReservationController::class, 'mesReservations']);
     });
    
     Route::prefix('/notifications')->group(function () {
